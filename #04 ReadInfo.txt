@@ -1,0 +1,67 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Member {
+    char Name[20];
+    int ID;
+
+public:
+    void accept() {
+        cout << "Enter Name: ";
+        cin >> Name;
+        cout << "Enter ID: ";
+        cin >> ID;
+    }
+
+    void display() {
+        cout << "\nName: " << Name;
+        cout << "\nID: " << ID;
+    }
+};
+
+int main() {
+    Member o[5];
+    fstream f;
+    int i, n;
+
+    f.open("b16.txt", ios::out | ios::binary);
+    if (!f) {
+        cout << "Error opening file for writing!" << endl;
+        return 1;
+    }
+
+    cout << "\nHow many member information do you need to store? ";
+    cin >> n;
+
+    if (n > 5) {
+        cout << "You can only store up to 5 members." << endl;
+        f.close();
+        return 1;
+    }
+
+    cout << "\nEnter information of members in this format (NAME/ID):" << endl;
+    for (i = 0; i < n; i++) {
+        cout << "\nEnter information for member " << (i + 1) << ": " << endl;
+        o[i].accept();
+        f.write((char *)&o[i], sizeof(Member)); 
+    }
+
+    f.close(); 
+    f.open("b16.txt", ios::in | ios::binary);
+    if (!f) {
+        cout << "Error opening file for reading!" << endl;
+        return 1;
+    }
+
+    cout << "\nInformation of Members is as follows:" << endl;
+    for (i = 0; i < n; i++) {
+        f.read((char *)&o[i], sizeof(Member)); 
+        o[i].display(); 
+        cout << endl;
+    }
+
+    f.close(); 
+
+    return 0;
+}

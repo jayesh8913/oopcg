@@ -1,0 +1,48 @@
+#include <iostream>
+#include <map>
+#include <string>
+
+using namespace std;
+
+int main() {
+    // Create a map to store state names and their populations
+    map<string, int> statePopulations;
+
+    // Number of states to input
+    int numStates;
+    cout << "How many states would you like to enter? ";
+    cin >> numStates;
+    cin.ignore();  // To ignore the newline character left by cin
+
+    // Take input for each state and its population
+    for (int i = 0; i < numStates; ++i) {
+        string state;
+        int population;
+
+        cout << "Enter the name of state #" << (i + 1) << ": ";
+        getline(cin, state);  // Take the state name with spaces
+
+        cout << "Enter the population of " << state << ": ";
+        cin >> population;
+        cin.ignore();  // Ignore the newline character left by cin
+
+        // Store the state and population in the map
+        statePopulations[state] = population;
+    }
+
+    // Ask the user for a state name to query
+    string stateQuery;
+    cout << "\nEnter the name of a state to get its population: ";
+    getline(cin, stateQuery);
+
+    // Search for the state in the map and display the population
+    auto it = statePopulations.find(stateQuery);
+
+    if (it != statePopulations.end()) {
+        cout << "The population of " << stateQuery << " is " << it->second << endl;
+    } else {
+        cout << "State not found in the map." << endl;
+    }
+
+    return 0;
+}

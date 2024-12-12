@@ -1,0 +1,126 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class StudentInfo {
+private:
+    string name, roll, studentClass, division, dob, bloodGroup;
+    string address, phone, license;
+
+public:
+    StudentInfo() {
+        name = "Unknown";
+        roll = "0";
+        studentClass = "Unknown";
+        division = "Unknown";
+        dob = "01/01/2000";
+        bloodGroup = "Unknown";
+        address = "Unknown";
+        phone = "0000000000";
+        license = "Unknown";
+    }
+
+    StudentInfo(const StudentInfo& other) {
+        name = other.name;
+        roll = other.roll;
+        studentClass = other.studentClass;
+        division = other.division;
+        dob = other.dob;
+        bloodGroup = other.bloodGroup;
+        address = other.address;
+        phone = other.phone;
+        license = other.license;
+    }
+
+    ~StudentInfo() {
+        cout << "\nDestructor called for " << name;
+    }
+
+    void setData(const string& name) {
+        this->name = name;
+        cout << "Enter Roll Number: ";
+        cin >> roll;
+        cout << "Enter Class: ";
+        cin >> studentClass;
+        cout << "Enter Division: ";
+        cin >> division;
+        cout << "Enter Date of Birth: ";
+        cin >> dob;
+        cout << "Enter Blood Group: ";
+        cin >> bloodGroup;
+        cout << "Enter Address: ";
+        cin.ignore();
+        getline(cin, address);
+        cout << "Enter Phone Number: ";
+        cin >> phone;
+        cout << "Enter Driving License: ";
+        cin >> license;
+    }
+
+    inline void display() const {
+        cout << name << "\t" << roll << "\t" << studentClass << "\t" << division
+             << "\t" << dob << "\t" << bloodGroup << "\t" << address << "\t"
+             << phone << "\t" << license << endl;
+    }
+
+    friend class Database;
+};
+
+class Database {
+private:
+    StudentInfo* students;
+    int count;
+
+public:
+    static int totalStudents;
+
+    Database(int n) {
+        count = n;
+        students = new StudentInfo[n];
+    }
+
+    ~Database() {
+        delete[] students;
+        cout << "\nAll student records deleted.";
+    }
+
+    void addStudent() {
+        for (int i = 0; i < count; ++i) {
+            string name;
+            cout << "\nEnter Name for Student " << i + 1 << ": ";
+            cin >> name;
+            students[i].setData(name);
+            ++totalStudents;
+        }
+    }
+
+    void displayStudents() {
+        cout << "\nName\tRoll\tClass\tDivision\tDOB\tBloodGroup\tAddress\tPhone\tLicense\n";
+        for (int i = 0; i < count; ++i) {
+            students[i].display();
+        }
+    }
+
+    static void showTotalStudents() {
+        cout << "\nTotal Students: " << totalStudents << endl;
+    }
+};
+
+int Database::totalStudents = 0;
+
+int main() {
+    try {
+        int n;
+        cout << "Enter number of students: ";
+        cin >> n;
+        if (n <= 0) throw invalid_argument("Invalid number of students.");
+
+        Database db(n);
+        db.addStudent();
+        db.displayStudents();
+        Database::showTotalStudents();
+    } catch (const exception& e) {
+        cout << "\nError: " << e.what();
+    }
+    return 0;
+}

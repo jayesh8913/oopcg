@@ -1,0 +1,89 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class publication {
+protected:
+    string title;
+    float price;
+
+public:
+    publication() : title(""), price(0.0) {} // Default constructor
+
+    publication(string t, float p) : title(t), price(p) {} // Parameterized constructor
+
+    virtual void getdata() { // Virtual to support polymorphism if needed
+        cin.ignore();
+        cout << "Enter title of publication: ";
+        getline(cin, title);
+        cout << "Enter price of publication: ";
+        cin >> price;
+    }
+
+    virtual void putdata() const {
+        cout << "Publication title: " << title << endl;
+        cout << "Publication price: " << price << endl;
+    }
+};
+
+class book : public publication {
+    int pagecount;
+
+public:
+    book() : pagecount(0) {} // Default constructor
+
+    book(string t, float p, int pc) : publication(t, p), pagecount(pc) {} // Parameterized constructor
+
+    void getdata() override {
+        publication::getdata();
+        cout << "Enter Book Page Count: ";
+        cin >> pagecount;
+    }
+
+    void putdata() const override {
+        publication::putdata();
+        cout << "Book page count: " << pagecount << endl;
+    }
+};
+
+class CD : public publication {
+    float time1;
+
+public:
+    CD() : time1(0.0) {} // Default constructor
+
+    CD(string t, float p, float tim) : publication(t, p), time1(tim) {} // Parameterized constructor
+
+    void getdata() override {
+        publication::getdata();
+        cout << "Enter tape's playing time: ";
+        cin >> time1;
+    }
+
+    void putdata() const override {
+        publication::putdata();
+        cout << "Tape's playing time: " << time1 << " minutes" << endl;
+    }
+};
+
+int main() {
+    cout << "Initial Book Data" << endl;
+    book b("C++ Programming", 230, 300);
+    b.putdata();
+
+    cout << "\nInitial CD Data" << endl;
+    CD c("C++ Tutorials", 100, 120.5);
+    c.putdata();
+
+    cout << "\nEnter New Details of Book and CD:" << endl;
+    b.getdata();
+    c.getdata();
+
+    cout << "\nBook Data Entered by User:" << endl;
+    b.putdata();
+
+    cout << "\nCD Data Entered by User:" << endl;
+    c.putdata();
+
+    return 0;
+}
